@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LAST_ACTIVE_PANE=$1
@@ -96,14 +96,14 @@ function capture() {
   case $key in
 
     enter)
+      printf -- "$text" | $clip_tool
       tmux set-buffer -- "$text"
-      # run in background as xclip won't work otherwise
-      tmux run-shell -b "tmux show-buffer|$clip_tool"
+      tmux paste-buffer -p -t '{last}'
       ;;
 
     tab)
       tmux set-buffer -- "$text"
-      tmux paste-buffer -t !
+      tmux paste-buffer -p -t '{last}'
       ;;
 
     ctrl-f)
